@@ -6,10 +6,10 @@
         title: '{{title}}'
     };
 
-    this.defaultTemplate
-    		=	'<li>'
-        +   this.tags.title
-    		+	'</li>';
+    this.defaultTemplate =
+        '<li>'
+      +   this.tags.title
+  		+	'</li>';
   }
 
   // @param {Array} |data| Data of the todoItems from storage
@@ -21,9 +21,9 @@
       var template = self.defaultTemplate;
       template = template.replace(self.tags.title, todoItem.title);
       view = view + template;
-    })
+    });
     return view;
-  }
+  };
 
   // export to window
   window.app = window.app || {};
