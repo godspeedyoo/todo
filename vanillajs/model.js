@@ -12,6 +12,12 @@
   Model.prototype.create = function(title, callback) {
     title = title || '';
     callback = callback || function() {};
+
+    var todoItem = {
+      title: title,
+      completed: false
+    };
+
     this.store.save(todoItem, callback);
   };
   // export to window
