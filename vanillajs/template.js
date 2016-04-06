@@ -6,7 +6,7 @@
         title: '{{title}}'
     };
 
-    this.defaultTemplate =
+    this.todoItemTemplate =
         '<li>'
       +   this.tags.title
   		+	'</li>';
@@ -18,7 +18,7 @@
     var self = this;
     // @param {object} |todoItem|
     data.forEach(function(todoItem) {
-      var template = self.defaultTemplate;
+      var template = self.todoItemTemplate;
       template = template.replace(self.tags.title, todoItem.title);
       view = view + template;
     });
@@ -31,11 +31,12 @@
 })(window);
 
 // execution code for testing
-// var data = [{
-//   title: 'finish a coding project',
-//   id: 1,
-//   completed: false
-// }]
-//
-// t = new app.Template();
-// console.log(t.fill(data));
+
+var data = [{
+  title: 'finish a coding project',
+  id: 1,
+  completed: false
+}]
+
+t = new app.Template();
+console.log(t.fill(data));
