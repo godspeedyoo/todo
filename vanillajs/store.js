@@ -5,15 +5,19 @@
 
   function Store(name, callback) {
     this._dbName = name;
-    findOrCreateLocalStorageDb(name);
-    // callback.call(this, object)
-    this.config = {
-      onSaveSuccessMessage: 'Todo item successfully saved!'
-    }
-  }
 
-  Store.prototype.writeToLocalStorageDb = function (name, data) {
-    localStorage[name] = JSON.stringify(data);
+    this.config = {
+      onSaveSuccessMessage: 'Todo item successfully saved!',
+      // define default database structure in localStorage
+      defaultDb: { todos: [] }
+    }
+
+    this.writeToLocalStorageDb = function (name, data) {
+      localStorage[name] = JSON.stringify(data);
+    }
+
+    this.writeToLocalStorageDb(name);
+    // callback.call(this, object)
   }
 
   Store.prototype.save = function (todoItem, callback, id) {
@@ -25,7 +29,9 @@
 
   // This can be changed to an ajax request if data will be stored in the backend
   Store.prototype.loadData = function() {
-    return JSON.parse(localStorage[this._dbName]);
+    var data = localStorage[this._dbName];
+    // localStorage returns "undefined" as string if undefined
+    return (data !== 'undefined') ?  data : this.config.defaultDb;
   }
 
   // PRIVATE
@@ -41,7 +47,6 @@
   window.app.Store = Store;
 
 })(window);
-
 
 // execution code for testing
 var s = new app.Store('test-db');

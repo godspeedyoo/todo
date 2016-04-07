@@ -10,5 +10,6 @@
     this.view = new app.View(this.template, this.ViewHelper);
   }
   var todo = new Todo('vanilla-js-example');
+  todo.view.render('<div>Hello World</div>');
 
 })();
