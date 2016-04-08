@@ -1,0 +1,20 @@
+{
+  "name": "fluxxor-todo",
+  "version": "1.0.0",
+  "description": "A simple todo app from the fluxxor example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-react": "^6.5.0",
+    "fluxxor": "^1.7.3",
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0"
+  },
+  "devDependencies": {
+    "webpack": "^1.12.14"
+  }
+}
