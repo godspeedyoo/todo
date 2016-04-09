@@ -1,7 +1,8 @@
 var Fluxxor = require('fluxxor');
-var constants = require('./constants.js');
-var actions = require('./actions.js');
+var constants = require('./constants.jsx');
+var actions = require('./actions.jsx');
 
+console.log("store.jsx");
 
 var TodoStore = Fluxxor.createStore({
   initialize: function() {
@@ -43,19 +44,6 @@ var TodoStore = Fluxxor.createStore({
 
   _nextTodoId: function() {
     return ++this.todoId;
-  }
-});
-
-
-var stores = {
-  TodoStore: new TodoStore()
-};
-
-var flux = new Fluxxor.Flux(stores, actions);
-
-flux.on("dispatch", function(type, payload) {
-  if (console && console.log) {
-    console.log("[Dispatch]", type, payload);
   }
 });
 
