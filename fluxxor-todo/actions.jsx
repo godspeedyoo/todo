@@ -1,8 +1,10 @@
+var constants = require('./constants.jsx');
+
 var actions = {
-  addTodo: function() {
+  addTodo: function(text) {
     this.dispatch(constants.ADD_TODO, {text: text});
   },
-  toggleTodo: function() {
+  toggleTodo: function(id) {
     this.dispatch(constants.TOGGLE_TODO, {id: id});
   },
   clearTodos: function() {

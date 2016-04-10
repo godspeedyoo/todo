@@ -2,8 +2,6 @@ var Fluxxor = require('fluxxor');
 var constants = require('./constants.jsx');
 var actions = require('./actions.jsx');
 
-console.log("store.jsx");
-
 var TodoStore = Fluxxor.createStore({
   initialize: function() {
     // Initialize with id 1 and increment with each new item
@@ -18,9 +16,10 @@ var TodoStore = Fluxxor.createStore({
   },
 
   onAddTodo: function(payload) {
+    var id = this.todoId;
     var todo = {
       id: this._nextTodoId(),
-      title: payload.title,
+      text: payload.text,
       completed: false
     };
     this.todos[id] = todo;
@@ -39,7 +38,9 @@ var TodoStore = Fluxxor.createStore({
   },
 
   getState: function() {
-    return this.todos;
+    return {
+      todos: this.todos
+    };
   },
 
   _nextTodoId: function() {

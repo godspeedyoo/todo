@@ -48,6 +48,7 @@
 	var Fluxxor = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(98);
 	var actions = __webpack_require__(257);
+	var constants = __webpack_require__(259);
 
 	var stores = {
 	  TodoStore: new TodoStore()
@@ -62,6 +63,10 @@
 	});
 
 	var React = __webpack_require__(261);
+
+	if (typeof window !== 'undefined') {
+	  window.React = React;
+	}
 
 	var FluxMixin = Fluxxor.FluxMixin(React),
 	    StoreWatchMixin = Fluxxor.StoreWatchMixin;
@@ -80,9 +85,8 @@
 	    return flux.store('TodoStore').getState();
 	  },
 
-	  onSubmitForm: function () {
+	  onSubmitForm: function (event) {
 	    event.preventDefault();
-	    console.log(this.state.newTodoText);
 	    if (this.state.newTodoText.trim()) {
 	      this.getFlux().actions.addTodo(this.state.newTodoText);
 	    }
@@ -95,14 +99,56 @@
 	  render: function () {
 	    var todos = this.state.todos;
 	    return React.createElement(
-	      'form',
-	      { onSubmit: this.onSubmitForm },
-	      React.createElement('input', { type: 'text',
-	        size: '30',
-	        name: 'title',
-	        onChange: this.handleTodoTextChange,
-	        placeholder: 'My todo' })
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.onSubmitForm },
+	        React.createElement('input', { type: 'text',
+	          size: '30',
+	          name: 'text',
+	          onChange: this.handleTodoTextChange,
+	          placeholder: 'My todo' }),
+	        React.createElement('input', { type: 'submit', value: ' + ' })
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        Object.keys(todos).map(function (id) {
+	          return React.createElement(
+	            'li',
+	            { key: id },
+	            React.createElement(TodoItem, { todo: todos[id] })
+	          );
+	        })
+	      )
 	    );
+	  }
+	});
+
+	var TodoItem = React.createClass({
+	  displayName: 'TodoItem',
+
+	  mixins: [FluxMixin],
+
+	  propTypes: {
+	    todo: React.PropTypes.object.isRequired
+	  },
+
+	  render: function () {
+	    var style = {
+	      textDecoration: this.props.todo.complete ? "line-through" : ""
+	    };
+
+	    return React.createElement(
+	      'span',
+	      { style: style, onClick: this.onClick },
+	      this.props.todo.text
+	    );
+	  },
+
+	  onClick: function () {
+	    this.getFlux().actions.toggleTodo(this.props.todo.id);
 	  }
 	});
 
@@ -23880,13 +23926,15 @@
 
 /***/ },
 /* 257 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	var constants = __webpack_require__(259);
 
 	var actions = {
-	  addTodo: function () {
+	  addTodo: function (text) {
 	    this.dispatch(constants.ADD_TODO, { text: text });
 	  },
-	  toggleTodo: function () {
+	  toggleTodo: function (id) {
 	    this.dispatch(constants.TOGGLE_TODO, { id: id });
 	  },
 	  clearTodos: function () {
@@ -23904,8 +23952,6 @@
 	var constants = __webpack_require__(259);
 	var actions = __webpack_require__(257);
 
-	console.log("store.jsx");
-
 	var TodoStore = Fluxxor.createStore({
 	  initialize: function () {
 	    // Initialize with id 1 and increment with each new item
@@ -23915,9 +23961,10 @@
 	  },
 
 	  onAddTodo: function (payload) {
+	    var id = this.todoId;
 	    var todo = {
 	      id: this._nextTodoId(),
-	      title: payload.title,
+	      text: payload.text,
 	      completed: false
 	    };
 	    this.todos[id] = todo;
@@ -23936,7 +23983,9 @@
 	  },
 
 	  getState: function () {
-	    return this.todos;
+	    return {
+	      todos: this.todos
+	    };
 	  },
 
 	  _nextTodoId: function () {
